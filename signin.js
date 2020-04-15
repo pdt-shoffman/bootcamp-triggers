@@ -46,32 +46,124 @@ function Notification() {
 }
 
 function TriggerEvents(key) {
-    var payload = {
+    var nagios = {
         "event_action": "trigger",
-        "client": "Splunk",
+        "client": "Nagios",
         "client_url": "http://54.193.12.191:8000/en-US/app/search/search?q=search%20login",
-        "dedup_key": `failed_login_${email}`,
         "routing_key": key,
         "payload": {
-            "summary": `Attempted malicious logins for username ${email}`,
-            "source": "Splunk",
+            "summary": `CRITICAL: 'mysql_long_running_query' on 'mysql-prod-db01.pd-ops.net`,
+            "source": "Nagios",
             "severity": "critical",
             "custom_details": {
-                "From": myIP,
-                "Event": "Logon",
-                "User": email,
-                "Last_Attempt": new Date(),
-                "To": document.title,
-                "Failure_Times": count
+                "IP": myIP,
             }
         }
     };
 
-    var options = {
-        data: JSON.stringify(payload)
+    var options1 = {
+        data: JSON.stringify(nagios)
     };
 
-    PDCEFEvent(options)
+    PDCEFEvent(options1)
+
+    var datadog1 = {
+        "event_action": "trigger",
+        "client": "Data Dog",
+        "client_url": "http://54.193.12.191:8000/en-US/app/search/search?q=search%20login",
+        "routing_key": key,
+        "payload": {
+            "summary": `API: Request Response Time is High for prod - (95th percentile > 100 ms on average during the last 10m)`,
+            "source": "Data Dog",
+            "severity": "critical",
+            "custom_details": {
+                "IP": myIP,
+            }
+        }
+    };
+
+    var options2 = {
+        data: JSON.stringify(datadog1)
+    };
+
+    PDCEFEvent(options2)
+
+
+    var splunk = {
+        "event_action": "trigger",
+        "client": "Splunk",
+        "client_url": "http://54.193.12.191:8000/en-US/app/search/search?q=search%20login",
+        "routing_key": key,
+        "payload": {
+            "summary": `Splunk Alert: Error connecting to MySQL: Too many connections (code 1040)`,
+            "source": "splunk",
+            "severity": "critical",
+            "custom_details": {
+                "IP": myIP,
+            }
+        }
+    };
+
+    var options4 = {
+        data: JSON.stringify(splunk)
+    };
+
+    PDCEFEvent(options4)
+
+    var datadog2 = {
+        "event_action": "trigger",
+        "client": "Data Dog",
+        "client_url": "http://54.193.12.191:8000/en-US/app/search/search?q=search%20login",
+        "routing_key": key,
+        "payload": {
+            "summary": `API: Request Response Time is High for prod - (95th percentile > 250 ms on average during the last 10m)`,
+            "source": "Data Dog",
+            "severity": "critical",
+            "custom_details": {
+                "IP": myIP,
+            }
+        }
+    };
+
+    var options3 = {
+        data: JSON.stringify(datadog2)
+    };
+
+    PDCEFEvent(options3)
+
+
+    var newrelic = {
+        "event_action": "trigger",
+        "client": "New Relic",
+        "client_url": "http://54.193.12.191:8000/en-US/app/search/search?q=search%20login",
+        "routing_key": key,
+        "payload": {
+            "summary": `Service Monitors (Inventory API Health Check violated API Request Failure)`,
+            "source": "New Relic",
+            "severity": "critical",
+            "custom_details": {
+                "IP": myIP,
+            }
+        }
+    };
+
+    var options5 = {
+        data: JSON.stringify(newrelic)
+    };
+
+    PDCEFEvent(options5)
+    PDCEFEvent(options5)
+    PDCEFEvent(options5)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -98,9 +190,10 @@ $('#inputPassword').keypress(function(e) {
 
 
 
-#BUTTON CLICKS
+//BUTTON CLICKS
 $('#Noriyuki').on('click', function() {
     var routing_key = "R029EEBH6U7LQGKATM5A1CS291C8F6SO"
+
     Notification()
     TriggerEvents(routing_key)
 });
@@ -157,6 +250,12 @@ $('#Victoria').on('click', function() {
    
    Notification()
    TriggerEvents(routing_key)
+});
+$('#Sarah').on('click', function() {
+    var routing_key = "R02GVJ7SXRP7WNDQH55KV94JE0SBAQ0P"
+
+    Notification()
+    TriggerEvents(routing_key)
 });
 
 
